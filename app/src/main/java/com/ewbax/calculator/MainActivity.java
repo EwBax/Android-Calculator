@@ -14,6 +14,7 @@ import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Constants
     private static final int MAX_NUMBER_LENGTH = 15;
     private static final int SHRINK_TEXT_SIZE_LIMIT = 8;
     private static final float SMALL_TEXT_SIZE = 42f;
@@ -48,15 +49,19 @@ public class MainActivity extends AppCompatActivity {
     private Double      leftNumber;
     private Double      rightNumber;
     private Character   operator;
+
+    // boolean flag for when expression was evaluated with equals button
     private boolean     evaluatedByEquals;
 
 
+    // onCreate method
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // setting flag to false to start
         evaluatedByEquals = false;
 
         // Assigning buttons to views by ID
@@ -84,16 +89,18 @@ public class MainActivity extends AppCompatActivity {
         expressionTV = findViewById(R.id.expressionTV);
         solutionTV = findViewById(R.id.solutionTV);
 
+        // creating error message snackbars
         lengthMessage = Snackbar.make(findViewById(R.id.rootLayout), R.string.lengthMessage, Snackbar.LENGTH_SHORT);
         rangeMessage = Snackbar.make(findViewById(R.id.rootLayout), R.string.rangeMessage, Snackbar.LENGTH_SHORT);
 
     } // End onCreate method
 
 
+    // Method to assign both ID and listener to button
     private void assignIDAndListener(Button btn, int id) {
         btn = findViewById(id);
         btn.setOnClickListener(onButtonClicked);
-    }
+    } // end assignIDAndListener method
 
 
     // Common listener for buttons
@@ -104,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
             // Checking if the expression was just evaluated with equals button
             if (evaluatedByEquals) {
 
+                // Checking which button was pressed by ID
                 switch (v.getId()) {
 
                     // any operator button pressed
@@ -113,13 +121,6 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.divisionBtn:
                         //do nothing
                         break;
-
-                    // negate button pressed
-                    case R.id.negateBtn:
-                        // clearing expressionTextView and keeping solutionTextView
-                        expressionTV.setText("");
-                        break;
-
                     // if anything but an operator was pressed we want to reset everything
                     default:
                         allClearPressed();
@@ -127,10 +128,12 @@ public class MainActivity extends AppCompatActivity {
 
                 }// end switch v.getID()
 
+                // resetting flag
                 evaluatedByEquals = false;
 
             } // end if(evaluatedByEquals)
 
+            // Checking which button was pressed by ID
             switch (v.getId()) {
 
                 //any numerical button pressed
@@ -190,34 +193,38 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Method for when a number button is pressed
-    private void numberPressed(Button buttonPressed) {
+    private void numberPressed(Button btn) {
 
         String solutionText = solutionTV.getText().toString();
-        String expressionText = expressionTV.getText().toString();
 
         // If only "0" is displayed
-        if (solutionText.matches("-?0")) {
+        if (solutionText.equals("0")) {
 
             // If left number is saved but operator is not, set operator to last char in expressionText
+            // we know there is an operator there in this case because the only way to save left number
+            // is by pressing an operator
             if (leftNumber != null && operator == null) {
+
+                // getting last character in expressionText as operator
+                String expressionText = expressionTV.getText().toString();
                 operator = expressionText.charAt(expressionText.length() - 1);
-            }
 
-            solutionText = solutionText.substring(0, solutionText.length() - 1);
-            solutionText += buttonPressed.getText();
-            solutionTV.setText(solutionText);
+            } // end if
 
-        // if right number is not null then an expression was just evaluated by pressing equals button
-        // Or if NaN then we just tried to divide by zero and need to reset
-        } else if (rightNumber != null || solutionText.equals("NaN")) {
+            // Setting solutionTV text to button text (number pressed)
+            solutionTV.setText(btn.getText());
+
+        // if NaN then we just tried to divide by zero and need to reset
+        } else if (solutionText.equals("NaN")) {
 
             allClearPressed();
-            solutionTV.setText(buttonPressed.getText());
+            solutionTV.setText(btn.getText());
 
         // finally, checking number length
-        } else if (checkNumberLength()){
+        } else if (checkNumberLength()){    // checkNumberLength returns true if we are not at max length
 
-            solutionText += buttonPressed.getText();
+            // appending button pressed to solutionTV
+            solutionText += btn.getText();
             solutionTV.setText(solutionText);
 
         } // end if/else block
@@ -228,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
     // Method to clear memory and both displays
     private void allClearPressed() {
 
-        // Clearing both text views and setting solution view to "0"
+        // Clearing both text views, setting solution view to "0", and resetting text size
         solutionTV.setText("0");
         expressionTV.setText("");
         solutionTV.setTextSize(LARGE_TEXT_SIZE);
@@ -246,10 +253,10 @@ public class MainActivity extends AppCompatActivity {
 
         String solutionText = solutionTV.getText().toString();
 
-        // checking to see if solutionTV is just "0"
-        if (!(solutionText.matches("-?0"))) {
+        // making sure solutionText does not just display "0"
+        if (!(solutionText.equals("0"))) {
 
-            // removing the last character from solutionText
+            // removing the last character from solutionText with substring
             solutionText = solutionText.substring(0, solutionText.length() - 1);
 
             // If there was only one character and it was deleted the string is empty now, so we set it to "0"
@@ -287,14 +294,11 @@ public class MainActivity extends AppCompatActivity {
     // Method for when an operator button is pressed
     private void operatorPressed(Button btn) {
 
-        String operatorString = btn.getText().toString();
-        String expressionText;
-
         // if operator has already been saved
         if (operator != null) {
 
             // saving right number
-            rightNumber = Double.parseDouble(solutionTV.getText().toString().replaceAll(",", ""));
+            rightNumber = Double.parseDouble(solutionTV.getText().toString());
 
             // evaluating expression
             double result = validateAndEvaluate();
@@ -303,26 +307,34 @@ public class MainActivity extends AppCompatActivity {
             if (result > (Double.MAX_VALUE * -1) && result < Double.MAX_VALUE) {
 
                 // setting solutionTextView to show result, and resetting numbers in memory
-                solutionTV.setText(formatDouble(result));
+                // we don't need to format here because it gets formatted in the next if block down below
+                // when it gets moved to expressionTV
+                solutionTV.setText(String.valueOf(result));
 
+                // resetting memory
                 leftNumber = null;
                 operator = null;
                 rightNumber = null;
 
-            } else {
+            } else {    // number is outside of valid range
+                // showing error message and performing all clear
                 rangeMessage.show();
                 allClearPressed();
-            }
+            }   // end if/else
 
-        }
+            // If this if block executed it will always go into the next if block below, which will
+            // update left number and expressionTextView to show result and new operation pressed
+
+        }   // end if
 
         // if left number has not been saved yet
         if (leftNumber == null) {
 
-            // saving left number and moving it to expression text view, appending operator, and resetting solutionTextView
-            leftNumber = Double.parseDouble(solutionTV.getText().toString().replaceAll(",", ""));
-            expressionText = formatDouble(leftNumber) + operatorString;
+            // saving left number and moving it to expression text view, appending operator
+            leftNumber = Double.parseDouble(solutionTV.getText().toString());
+            String expressionText = formatDouble(leftNumber) + btn.getText();
             expressionTV.setText(expressionText);
+            // resetting solutionTextView and text size
             solutionTV.setText("0");
             solutionTV.setTextSize(LARGE_TEXT_SIZE);
 
@@ -330,12 +342,12 @@ public class MainActivity extends AppCompatActivity {
         } else {
 
             //removing last character from expressionTV and replacing with new operator
-            expressionText = expressionTV.getText().toString();
+            String expressionText = expressionTV.getText().toString();
             expressionText = expressionText.substring(0, expressionText.length() - 1);
-            expressionText += operatorString;
+            expressionText += btn.getText();
             expressionTV.setText(expressionText);
 
-        }
+        } //end if/else block
 
     } // end operatorPressed method
 
@@ -345,20 +357,18 @@ public class MainActivity extends AppCompatActivity {
 
         String expressionText = expressionTV.getText().toString();
 
-        // Checking to see if there has been an operator pressed by checking if saved in memory
-        // and checking if the last character in expressionText is not a digit
-        if (operator == null) {
-
-            if (expressionText.length() > 0 && !Character.isDigit(expressionText.charAt(expressionText.length() - 1))) {
-                operator = expressionText.charAt(expressionText.length() - 1);
-            }
-
-        }
+        // if operator hasn't been saved yet, we check if an operator has been pressed by checking
+        // last character in expressionText. The only way it is not a digit is if it is an operator
+        // Checking expressionText.length() > 0 first to avoid checking index -1 if length is 0
+        if (operator == null && (expressionText.length() > 0 && !Character.isDigit(expressionText.charAt(expressionText.length() - 1)))) {
+            operator = expressionText.charAt(expressionText.length() - 1);
+        }   // end if
 
         // If an operator has been saved
         if (operator != null) {
 
             // getting right number from solutionTV, appending it and = to expressionTV
+            // Removing any commas that may have been added through formatting
             rightNumber = Double.parseDouble(solutionTV.getText().toString().replaceAll(",", ""));
             expressionText += formatDouble(rightNumber) + "=";
             expressionTV.setText(expressionText);
@@ -368,8 +378,6 @@ public class MainActivity extends AppCompatActivity {
 
             // Making sure result is in acceptable range
             if (result > (Double.MAX_VALUE * -1) && result < Double.MAX_VALUE) {
-
-                Log.i("result=", String.valueOf(result));
 
                 // setting solutionTextView to show result
                 solutionTV.setText(formatDouble(result));
@@ -387,11 +395,12 @@ public class MainActivity extends AppCompatActivity {
                 rightNumber = null;
 
             } else {
+                // showing error message that calculation was out of range, then performing all clear
                 rangeMessage.show();
                 allClearPressed();
-            }
+            }   // end if/else block
 
-        }
+        }   // end if operator!=null block
 
     } // end equalsPressed method
 
@@ -399,13 +408,17 @@ public class MainActivity extends AppCompatActivity {
     // method for when negate button is pressed
     private void negatePressed() {
 
-        // negating the value in solutionTV
         Double num = Double.parseDouble(solutionTV.getText().toString());
-        num *= -1;
 
-        // Not using formatDouble method because we do not want commas or scientific notation to appear when negating
-        DecimalFormat format = new DecimalFormat("#.#");
-        solutionTV.setText(format.format(num));
+        // negating the value in solutionTV, only if it does not equal zero
+        if (num != 0) {
+
+            num *= -1;
+
+            // Not using formatDouble method because we do not want commas or scientific notation to appear when negating
+            DecimalFormat format = new DecimalFormat("#.#");
+            solutionTV.setText(format.format(num));
+        }
 
     } //method for negate being pressed
 
@@ -417,6 +430,7 @@ public class MainActivity extends AppCompatActivity {
         if (rightNumber == 0 && operator == '÷') {
             return Double.NaN;
         } else {
+            // Calling business class to perform calculation
             return Calculation.calculate(leftNumber, rightNumber, operator);
         }
 
@@ -434,12 +448,14 @@ public class MainActivity extends AppCompatActivity {
         } else {
             format = new DecimalFormat("#E0");
         }
+
+        // returning formatted string representing num
         return format.format(num);
 
     } // end formatDouble method
 
 
-    // Method to check the length of input numbers, shows popup and returns false if at max length
+    // Method to check the length of input numbers, shows popup and returns false if at or past max length
     private boolean checkNumberLength() {
 
         // Removing the negative sign to get an accurate count of digits
@@ -449,14 +465,12 @@ public class MainActivity extends AppCompatActivity {
         if (solutionText.length() >= MAX_NUMBER_LENGTH) {
             lengthMessage.show();
             return false;
-
         } else {
-
             if (solutionText.length() == SHRINK_TEXT_SIZE_LIMIT) {
                 solutionTV.setTextSize(SMALL_TEXT_SIZE);
             }
             return true;
-        }
+        }   // end if/else block
 
     } // end checkNumberLength method
 
