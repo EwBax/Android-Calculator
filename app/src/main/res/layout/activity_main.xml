@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TableLayout
+        android:id="@+id/rootLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="0, 1, 2, 3"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow
+            android:id="@+id/row1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+
+            <TextView
+                android:id="@+id/expressionTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_span="4"
+                android:gravity="bottom"
+                android:textAlignment="textEnd"
+                android:textSize="28sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/row2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3">
+
+            <TextView
+                android:id="@+id/solutionTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_span="4"
+                android:autoSizeTextType="none"
+                android:inputType="textMultiLine"
+                android:singleLine="false"
+                android:text="@string/zero"
+                android:textAlignment="textEnd"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="56sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/row3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/allClearBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_span="2"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/allClear"
+                android:textSize="21sp" />
+
+            <Button
+                android:id="@+id/deleteBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/delete"
+                android:textSize="21sp" />
+
+            <Button
+                android:id="@+id/divisionBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/division"
+                android:textSize="21sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/row4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/num7Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/seven"
+                android:textSize="21sp" />
+
+            <Button
+                android:id="@+id/num8Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/eight"
+                android:textSize="21sp" />
+
+            <Button
+                android:id="@+id/num9Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/nine"
+                android:textSize="21sp" />
+
+            <Button
+                android:id="@+id/multiplicationBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/multiplication"
+                android:textSize="21sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/row5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/num4Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/four"
+                android:textSize="21sp" />
+
+            <Button
+                android:id="@+id/num5Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/five"
+                android:textSize="21sp" />
+
+            <Button
+                android:id="@+id/num6Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/six"
+                android:textSize="21sp" />
+
+            <Button
+                android:id="@+id/subtractionBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/subtraction"
+                android:textSize="21sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/row6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/num1Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/one"
+                android:textSize="21sp" />
+
+            <Button
+                android:id="@+id/num2Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/two"
+                android:textSize="21sp" />
+
+            <Button
+                android:id="@+id/num3Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/three"
+                android:textSize="21sp" />
+
+            <Button
+                android:id="@+id/additionBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/addition"
+                android:textSize="21sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/row7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/negateBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/negate"
+                android:textSize="21sp" />
+
+            <Button
+                android:id="@+id/num0Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/zero"
+                android:textSize="21sp" />
+
+            <Button
+                android:id="@+id/decimalBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/decimal" />
+
+            <Button
+                android:id="@+id/equalsBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:insetLeft="2.5dp"
+                android:insetTop="2.5dp"
+                android:insetRight="2.5dp"
+                android:insetBottom="2.5dp"
+                android:text="@string/equals" />
+        </TableRow>
+    </TableLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
