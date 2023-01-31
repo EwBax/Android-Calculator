@@ -3,7 +3,6 @@ package com.ewbax.calculator;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -108,8 +107,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
 
+            if (solutionTV.getText().toString().matches("NaN")) {
+                allClearPressed();
+                evaluatedByEquals = false;
+
             // Checking if the expression was just evaluated with equals button
-            if (evaluatedByEquals) {
+            } else if (evaluatedByEquals) {
 
                 // Checking which button was pressed by ID
                 switch (v.getId()) {
@@ -131,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 // resetting flag
                 evaluatedByEquals = false;
 
-            } // end if(evaluatedByEquals)
+            } // end if/else if
 
             // Checking which button was pressed by ID
             switch (v.getId()) {
@@ -301,26 +304,26 @@ public class MainActivity extends AppCompatActivity {
             rightNumber = Double.parseDouble(solutionTV.getText().toString());
 
             // evaluating expression
-            double result = validateAndEvaluate();
-
-            // Making sure result is in acceptable range
-            if (result > (Double.MAX_VALUE * -1) && result < Double.MAX_VALUE) {
-
-                // setting solutionTextView to show result, and resetting numbers in memory
-                // we don't need to format here because it gets formatted in the next if block down below
-                // when it gets moved to expressionTV
-                solutionTV.setText(String.valueOf(result));
-
-                // resetting memory
-                leftNumber = null;
-                operator = null;
-                rightNumber = null;
-
-            } else {    // number is outside of valid range
-                // showing error message and performing all clear
-                rangeMessage.show();
-                allClearPressed();
-            }   // end if/else
+            double result = evaluateExpression();
+            validateResult(result);
+//            // Making sure result is in acceptable range
+//            if ((result > (Double.MAX_VALUE * -1) && result < Double.MAX_VALUE) || String.valueOf(result).matches("NaN")) {
+//
+//                // setting solutionTextView to show result, and resetting numbers in memory
+//                // we don't need to format here because it gets formatted in the next if block down below
+//                // when it gets moved to expressionTV
+//                solutionTV.setText(String.valueOf(result));
+//
+//                // resetting memory
+//                leftNumber = null;
+//                operator = null;
+//                rightNumber = null;
+//
+//            } else {    // number is outside of valid range
+//                // showing error message and performing all clear
+//                rangeMessage.show();
+//                allClearPressed();
+//            }   // end if/else
 
             // If this if block executed it will always go into the next if block below, which will
             // update left number and expressionTextView to show result and new operation pressed
@@ -331,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
         if (leftNumber == null) {
 
             // saving left number and moving it to expression text view, appending operator
-            leftNumber = Double.parseDouble(solutionTV.getText().toString());
+            leftNumber = Double.parseDouble(solutionTV.getText().toString().replaceAll(",", ""));
             String expressionText = formatDouble(leftNumber) + btn.getText();
             expressionTV.setText(expressionText);
             // resetting solutionTextView and text size
@@ -374,31 +377,34 @@ public class MainActivity extends AppCompatActivity {
             expressionTV.setText(expressionText);
 
             // evaluating expression
-            double result = validateAndEvaluate();
+            double result = evaluateExpression();
 
-            // Making sure result is in acceptable range
-            if (result > (Double.MAX_VALUE * -1) && result < Double.MAX_VALUE) {
+            validateResult(result);
+            evaluatedByEquals = true;
 
-                // setting solutionTextView to show result
-                solutionTV.setText(formatDouble(result));
-
-                // Changing text size if length is >= 8
-                if (solutionTV.getText().length() >= SHRINK_TEXT_SIZE_LIMIT) {
-                    solutionTV.setTextSize(SMALL_TEXT_SIZE);
-                }
-
-                // resetting numbers and operator in memory, and changing flag to let program know
-                // expression was just evaluated by equals
-                evaluatedByEquals = true;
-                leftNumber = null;
-                operator = null;
-                rightNumber = null;
-
-            } else {
-                // showing error message that calculation was out of range, then performing all clear
-                rangeMessage.show();
-                allClearPressed();
-            }   // end if/else block
+//            // Making sure result is in acceptable range
+//            if ((result > (Double.MAX_VALUE * -1) && result < Double.MAX_VALUE) || String.valueOf(result).matches("NaN")) {
+//
+//                // setting solutionTextView to show result
+//                solutionTV.setText(formatDouble(result));
+//
+//                // Changing text size if length is >= 8
+//                if (solutionTV.getText().length() >= SHRINK_TEXT_SIZE_LIMIT) {
+//                    solutionTV.setTextSize(SMALL_TEXT_SIZE);
+//                }
+//
+//                // resetting numbers and operator in memory, and changing flag to let program know
+//                // expression was just evaluated by equals
+//                evaluatedByEquals = true;
+//                leftNumber = null;
+//                operator = null;
+//                rightNumber = null;
+//
+//            } else {
+//                // showing error message that calculation was out of range, then performing all clear
+//                rangeMessage.show();
+//                allClearPressed();
+//            }   // end if/else block
 
         }   // end if operator!=null block
 
@@ -424,7 +430,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     // method for validating and evaluating expression
-    private double validateAndEvaluate() {
+    private double evaluateExpression() {
 
         // Checking for divide by zero, and returning NaN if that is the case
         if (rightNumber == 0 && operator == '÷') {
@@ -473,5 +479,32 @@ public class MainActivity extends AppCompatActivity {
         }   // end if/else block
 
     } // end checkNumberLength method
+
+
+    // Method to validate and update solutionTextView with result from expression
+    private void validateResult(Double result) {
+
+        // Making sure it is in the appropriate range OR NaN
+        if ((result > (Double.MAX_VALUE * -1) && result < Double.MAX_VALUE) || String.valueOf(result).matches("NaN")) {
+
+            // setting solutionTextView to show result
+            solutionTV.setText(formatDouble(result));
+
+            // Changing text size if length is >= 8
+            if (solutionTV.getText().length() >= SHRINK_TEXT_SIZE_LIMIT) {
+                solutionTV.setTextSize(SMALL_TEXT_SIZE);
+            }
+
+            // resetting numbers and operator in memory
+            leftNumber = null;
+            operator = null;
+            rightNumber = null;
+
+        } else {
+            // showing error message that calculation was out of range, then performing all clear
+            rangeMessage.show();
+            allClearPressed();
+        }   // end if/else block
+    }
 
 } // End MainActivity class
