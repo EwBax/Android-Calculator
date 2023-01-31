@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Calculator</string>
+    <string name="app_name">Ewan\'s Calculator</string>
     <string name="allClear">AC</string>
     <string name="delete">\u232b</string>
     <string name="division">÷</string>
