@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
 
+            // Checking if we divided by zero
             if (solutionTV.getText().toString().matches("NaN")) {
                 allClearPressed();
                 evaluatedByEquals = false;
@@ -201,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         String solutionText = solutionTV.getText().toString();
 
         // If only "0" is displayed
-        if (solutionText.equals("0")) {
+        if (solutionText.matches("-?0")) {
 
             // If left number is saved but operator is not, set operator to last char in expressionText
             // we know there is an operator there in this case because the only way to save left number
@@ -257,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
         String solutionText = solutionTV.getText().toString();
 
         // making sure solutionText does not just display "0"
-        if (!(solutionText.equals("0"))) {
+        if (!(solutionText.matches("-?0"))) {
 
             // removing the last character from solutionText with substring
             solutionText = solutionText.substring(0, solutionText.length() - 1);
@@ -306,24 +307,6 @@ public class MainActivity extends AppCompatActivity {
             // evaluating expression
             double result = evaluateExpression();
             validateResult(result);
-//            // Making sure result is in acceptable range
-//            if ((result > (Double.MAX_VALUE * -1) && result < Double.MAX_VALUE) || String.valueOf(result).matches("NaN")) {
-//
-//                // setting solutionTextView to show result, and resetting numbers in memory
-//                // we don't need to format here because it gets formatted in the next if block down below
-//                // when it gets moved to expressionTV
-//                solutionTV.setText(String.valueOf(result));
-//
-//                // resetting memory
-//                leftNumber = null;
-//                operator = null;
-//                rightNumber = null;
-//
-//            } else {    // number is outside of valid range
-//                // showing error message and performing all clear
-//                rangeMessage.show();
-//                allClearPressed();
-//            }   // end if/else
 
             // If this if block executed it will always go into the next if block below, which will
             // update left number and expressionTextView to show result and new operation pressed
@@ -381,30 +364,6 @@ public class MainActivity extends AppCompatActivity {
 
             validateResult(result);
             evaluatedByEquals = true;
-
-//            // Making sure result is in acceptable range
-//            if ((result > (Double.MAX_VALUE * -1) && result < Double.MAX_VALUE) || String.valueOf(result).matches("NaN")) {
-//
-//                // setting solutionTextView to show result
-//                solutionTV.setText(formatDouble(result));
-//
-//                // Changing text size if length is >= 8
-//                if (solutionTV.getText().length() >= SHRINK_TEXT_SIZE_LIMIT) {
-//                    solutionTV.setTextSize(SMALL_TEXT_SIZE);
-//                }
-//
-//                // resetting numbers and operator in memory, and changing flag to let program know
-//                // expression was just evaluated by equals
-//                evaluatedByEquals = true;
-//                leftNumber = null;
-//                operator = null;
-//                rightNumber = null;
-//
-//            } else {
-//                // showing error message that calculation was out of range, then performing all clear
-//                rangeMessage.show();
-//                allClearPressed();
-//            }   // end if/else block
 
         }   // end if operator!=null block
 
