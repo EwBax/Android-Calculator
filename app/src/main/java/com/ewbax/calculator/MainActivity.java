@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Using regex to check if there is already a decimal, and checking number of digits in number
-        if (checkNumberLength() && !(solutionText.matches("-?\\d+.\\d*"))) {
+        if (checkNumberLength() && !(solutionText.matches("-?\\d+\\.\\d*"))) {
             solutionText += ".";    // appending decimal to end of string
             solutionTV.setText(solutionText);   //updating text displayed
         }
